@@ -1,0 +1,6 @@
+.DS_Store
+Resources/.DS_Store
+Resources/android/.DS_Store
+build/iphone/build/*
+build/android/bin/*
+build/.DS_Store
