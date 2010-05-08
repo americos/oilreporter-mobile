@@ -241,7 +241,6 @@ function newVideo() {
     mediaTypes: [Ti.Media.MEDIA_TYPE_VIDEO],
     success: function(event) {
       var cropRect = event.cropRect;
-      var image = event.media;
       currentMedia = event.media;
 
       if(currentImageAdded)  {
@@ -279,7 +278,6 @@ function newPhoto() {
     mediaTypes: [Ti.Media.MEDIA_TYPE_PHOTO],
     success: function(event) {
       var cropRect = event.cropRect;
-      var image = event.media;
       currentMedia = event.media;
 
       if(currentImageAdded)  {
@@ -318,7 +316,6 @@ function chooseFromGallery() {
     mediaTypes: [Ti.Media.MEDIA_TYPE_PHOTO, Ti.Media.MEDIA_TYPE_VIDEO],
     success: function(event) {
       var cropRect = event.cropRect;
-      var image = event.media;
       currentMedia = event.media;
 
       if(currentImageAdded)  {
