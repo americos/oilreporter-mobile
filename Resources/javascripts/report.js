@@ -201,11 +201,12 @@ var currentMedia = false;
 var chooseMediaSource = function(event) {
   switch(event.index) {
     case 0:
-      Ti.Media.showCamera({
-        mediaTypes: [Ti.Media.MEDIA_TYPE_PHOTO, Ti.Media.MEDIA_TYPE_VIDEO]
-      });
+      newVideo();
       break;
     case 1:
+      newPhoto();
+      break;
+    case 2:
       chooseFromGallery();
       break;
     case event.destructive:
@@ -225,14 +226,91 @@ chooseMedia.addEventListener('click', chooseMediaSource);
 
 function displayMediaChooser() {
   if(currentImageAdded) {
-    chooseMedia.options = ['New Photo or Video', 'Choose Existing', 'Remove Existing', 'Cancel'];
-    chooseMedia.destructive = 2;  
-    chooseMedia.cancel = 3;
+    chooseMedia.options = ['New Video', 'New Photo', 'Choose Existing', 'Remove Existing', 'Cancel'];
+    chooseMedia.destructive = 3;  
+    chooseMedia.cancel = 4;
   } else {
-    chooseMedia.options = ['New Photo or Video', 'Choose Existing','Cancel'];
-    chooseMedia.cancel = 2;
+    chooseMedia.options = ['New Video', 'New Photo', 'Choose Existing','Cancel'];
+    chooseMedia.cancel = 3;
   }
   chooseMedia.show();
+}
+
+function newVideo() {
+  Ti.Media.showCamera({
+    mediaTypes: [Ti.Media.MEDIA_TYPE_VIDEO],
+    success: function(event) {
+      var cropRect = event.cropRect;
+      var image = event.media;
+      currentMedia = event.media;
+
+      if(currentImageAdded)  {
+        mediaButtonBg.remove(currentImageView);
+        currentImageAdded = false;
+      }
+      
+      Ti.UI.createAlertDialog({
+      	title:'Video Added',
+      	message:'Your video has been attached and is ready to be submitted.'
+      }).show();
+
+
+      currentImageView.addEventListener('click', function(event) {
+        displayMediaChooser();
+      });
+      mediaButtonBg.add(currentImageView);
+      currentImageAdded = true;
+    },
+		error:function(error) {
+			Ti.UI.createAlertDialog({
+			  title:'Sorry',
+			  message:'This device cannot record videos.'
+			}).show();
+		},
+		allowImageEditing:false,
+		saveToPhotoGallery:true,
+		videoMaximumDuration:10000,
+		videoQuality:Titanium.Media.QUALITY_HIGH
+  });
+}
+
+function newPhoto() {
+  Ti.Media.showCamera({
+    mediaTypes: [Ti.Media.MEDIA_TYPE_PHOTO],
+    success: function(event) {
+      var cropRect = event.cropRect;
+      var image = event.media;
+      currentMedia = event.media;
+
+      if(currentImageAdded)  {
+        mediaButtonBg.remove(currentImageView);
+        currentImageAdded = false;
+      }
+      
+      currentImageView = Ti.UI.createImageView({
+                        top: 1,
+                        left: 1,
+                        image: event.media,
+                        height: 44,
+                        width: 44,
+                        borderRadius: 2
+                      });
+
+      currentImageView.addEventListener('click', function(event) {
+        displayMediaChooser();
+      });
+      mediaButtonBg.add(currentImageView);
+      currentImageAdded = true;
+    },
+		error:function(error) {
+			Ti.UI.createAlertDialog({
+			  title:'Sorry',
+			  message:'This device cannot take photos.'
+			}).show();
+		},
+		allowImageEditing:true,
+		saveToPhotoGallery:true
+  });
 }
 
 function chooseFromGallery() {

@@ -7,19 +7,19 @@
 #define _QUOTEME(x) #x
 #define STRING(x) _QUOTEME(x)
 
-NSString * const TI_APPLICATION_DEPLOYTYPE = @"__DEPLOYTYPE__";
-NSString * const TI_APPLICATION_ID = @"__APP_ID__";
-NSString * const TI_APPLICATION_PUBLISHER = @"__APP_PUBLISHER__";
-NSString * const TI_APPLICATION_URL = @"__APP_URL__";
-NSString * const TI_APPLICATION_NAME = @"__APP_NAME__";
-NSString * const TI_APPLICATION_VERSION = @"__APP_VERSION__";
-NSString * const TI_APPLICATION_DESCRIPTION = @"__APP_DESCRIPTION__";
-NSString * const TI_APPLICATION_COPYRIGHT = @"__APP_COPYRIGHT__";
-NSString * const TI_APPLICATION_GUID = @"__APP_GUID__";
-BOOL const TI_APPLICATION_ANALYTICS = __APP_ANALYTICS__;
+NSString * const TI_APPLICATION_DEPLOYTYPE = @"development";
+NSString * const TI_APPLICATION_ID = @"com.intridea.oilreporter";
+NSString * const TI_APPLICATION_PUBLISHER = @"not specified";
+NSString * const TI_APPLICATION_URL = @"not specified";
+NSString * const TI_APPLICATION_NAME = @"Oil Reporter";
+NSString * const TI_APPLICATION_VERSION = @"1.0";
+NSString * const TI_APPLICATION_DESCRIPTION = @"not specified";
+NSString * const TI_APPLICATION_COPYRIGHT = @"not specified";
+NSString * const TI_APPLICATION_GUID = @"0c5d028b-bc51-49e4-a79b-00fe7cab80b9";
+BOOL const TI_APPLICATION_ANALYTICS = true;
 
 #ifdef DEBUG
-NSString * const TI_APPLICATION_RESOURCE_DIR = @"__APP_RESOURCE_DIR__";
+NSString * const TI_APPLICATION_RESOURCE_DIR = @"/code/titanium/Oil Reporter/build/iphone/build/Debug-iphonesimulator/Oil Reporter.app";
 #endif
 
 int main(int argc, char *argv[]) {
