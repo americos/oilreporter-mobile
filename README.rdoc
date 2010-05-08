@@ -1,7 +1,7 @@
 = Oil Reporter
 
 Built using Appcelerator Titanium Mobile.  This single project works on
-both iPhone and Android devices.
+both iPhone and Android devices. 
 
 == About Oil Reporter
 
