@@ -4,9 +4,20 @@ var win = Ti.UI.currentWindow;
 var properties = Ti.App.Properties;
 var currentImageView;
 var currentImageAdded = false;
+var wildlifeValue = "No wildlife present";
 var hostname = "http://oilreporter.heroku.com";
 
 // See
+var scrollView = Ti.UI.createScrollView({
+  top:0,
+  left:0,
+  contentWidth:320,
+  contentHeight:710,
+  height:480,
+  width:320,
+  verticalBounce: false
+});
+
 var seeView = Ti.UI.createView({
   top: 10,
   left: 10,
@@ -52,7 +63,7 @@ var mediaLabel = Ti.UI.createLabel({
   height: 30,
   color: '#fff',
 	font:{fontSize:16, fontWeight:'bold'},
-  text:'Add a Photo or Video'
+  text:'Add Photo or Video'
 });
 var mediaDescLabel = Ti.UI.createLabel({
   top: 120,
@@ -100,7 +111,7 @@ mediaAddButton.addEventListener('click', function() {
 mediaButtonBg.add(mediaAddButton);
 mediaView.add(mediaButtonBg);
 seeView.add(mediaView);
-win.add(seeView);
+scrollView.add(seeView);
 
 // Oil
 var oilView = Ti.UI.createView({
@@ -129,7 +140,7 @@ var oilDescLabel = Ti.UI.createLabel({
   height: 30,
   color: '#eee',
 	font:{fontSize:12, fontWeight:'normal'},
-  text:"0 is open water, 10 is thick"
+  text:"0 is open water, 10 is thick oil"
 });
 oilView.add(oilDescLabel);
 
@@ -149,51 +160,116 @@ oilSlider.addEventListener('change',function(e) {
 	oilTitleLabel.text = "How Much Oil Do You See? (" + Math.round(oilSlider.value)+")";
 });
 
-win.add(oilView);
+scrollView.add(oilView);
 
-// Respond
-var respondView = Ti.UI.createView({
-  top: 286,
+
+// Wildlife
+var wildView = Ti.UI.createView({
+  top: 285,
   left: 10,
   width: 300,
-  height: 70,
+  height: 90,
   backgroundColor:'#5a5c64',
   borderRadius:6
 });
-
-var respondTitleLabel = Ti.UI.createLabel({
+var wildTitleLabel = Ti.UI.createLabel({
   top: 5,
   left: 10,
-  width: 160,
+  width: 300,
   height: 30,
   color: '#fff',
 	font:{fontSize:18, fontWeight:'bold'},
-  text:"Mark as Urgent?"
+  text:"Is There Wildlife Present?"
 });
-respondView.add(respondTitleLabel);
+wildView.add(wildTitleLabel);
 
-var respondDescLabel = Ti.UI.createLabel({
+var html = "<html><body bgcolor='#5a5c64'>";
+html += "<select id='wildlife_select' style='width: 270px; font-size: 14px; height: 30px;'>";
+html += "<option value=\"No wildlife present\">No wildlife present</option>";
+html += "<option value=\"Alive, no distress\">Alive, no distress</option>";
+html += "<option value=\"Alive, some distress\">Alive, some distress</option>";
+html += "<option value=\"Alive, very distressed\">Alive, very distressed</option>";
+html += "<option value=\"Dead\">Dead</option>";
+html += "</select>";
+html += "<script type='text/javascript'>";
+html += "document.getElementById('wildlife_select').onchange = function(){ Titanium.App.fireEvent('set_wildlife_value',{value:this.value}); };";
+html += "</script>";
+html +="</body></html>";
+
+var wildWebView = Ti.UI.createWebView({
+  top: 35,
+  left: 00,
+  width: 290,
+  height: 44,
+  html:html
+});
+wildView.add(wildWebView);
+scrollView.add(wildView);
+
+
+// Wetlands
+var wetView = Ti.UI.createView({
+  top: 385,
+  left: 10,
+  width: 300,
+  height: 90,
+  backgroundColor:'#5a5c64',
+  borderRadius:6
+});
+var wetTitleLabel = Ti.UI.createLabel({
+  top: 5,
+  left: 10,
+  width: 300,
+  height: 30,
+  color: '#fff',
+	font:{fontSize:18, fontWeight:'bold'},
+  text:"Impact to The Wetlands? (5)"
+});
+wetView.add(wetTitleLabel);
+
+var wetDescLabel = Ti.UI.createLabel({
   top: (Ti.Platform.name == 'android' ? 30 : 25),
   left: 10,
-  width: 160,
+  width: 300,
   height: 30,
   color: '#eee',
 	font:{fontSize:12, fontWeight:'normal'},
-  text:"Do you require a response?"
+  text:"0 is no impact, 10 is severe impact"
 });
-respondView.add(respondDescLabel);
+wetView.add(wetDescLabel);
 
-var respondSwitch = Ti.UI.createSwitch({
-  top: (Ti.Platform.name == 'android' ? 15 : 18),
-  right: 20,
-  width: 80,
+var wetSlider = Ti.UI.createSlider({
+  top: 55,
+  left: 10,
+  width: 280,
   height: "auto",
+  min: 0,
+  max: 10,
+  value:5,
   enabled: true
 });
-respondView.add(respondSwitch);
+wetView.add(wetSlider);
 
-win.add(respondView);
+wetSlider.addEventListener('change',function(e) {
+	wetTitleLabel.text = "Impact to The Wetlands? (" + Math.round(wetSlider.value)+")";
+});
 
+scrollView.add(wetView);
+
+var reportShoreLabel = Ti.UI.createLabel({
+  top: 370,
+  left: 0,
+  width:320,
+  font:{fontSize:14, fontWeight:'normal'},
+  color:'#fff',
+  textAlign:'center',
+  text:'To report oiled shoreline call: \n(866) 448-5816\n\nTo report oiled wildlife call: \n(866) 557-1401'
+});
+
+scrollView.add(reportShoreLabel);
+
+
+win.add(scrollView);
 
 // Media management
 var currentMedia = false;
@@ -394,6 +470,8 @@ Ti.App.addEventListener('submit_form', function(options) {
   var jsonData = JSON.stringify({ report: {
                                     description: seeField.value,
                                     oil        : oilSlider.value,
+                                    wetlands   : wetSlider.value,
+                                    wildlife   : wildlifeValue,
                                     respond    : respondSwitch.value,
                                     latitude   : options.latitude,
                                     longitude  : options.longitude
@@ -509,3 +587,8 @@ if(Ti.Platform.name == "android") {
   menu.add(submitMenuItem);
   Ti.UI.Android.OptionMenu.setMenu(menu); 
 }
+
+
+Ti.App.addEventListener("set_wildlife_value",function(e){
+  wildlifeValue = e.value;
+});
