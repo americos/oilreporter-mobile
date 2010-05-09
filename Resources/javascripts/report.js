@@ -53,7 +53,7 @@ var seeField = Ti.UI.createTextArea({
 });
 seeField.addEventListener("return",function(e){
   seeField.blur();
-})
+});
 seeView.add(seeField);
 
 var mediaLabel = Ti.UI.createLabel({
@@ -472,7 +472,6 @@ Ti.App.addEventListener('submit_form', function(options) {
                                     oil        : oilSlider.value,
                                     wetlands   : wetSlider.value,
                                     wildlife   : wildlifeValue,
-                                    respond    : respondSwitch.value,
                                     latitude   : options.latitude,
                                     longitude  : options.longitude
                                   }
@@ -482,17 +481,21 @@ Ti.App.addEventListener('submit_form', function(options) {
   xhr.onerror = xhrOnError;
 
   xhr.onload = function() {
-    Ti.API.info('Response ' + this.responseText);
-    var reportId = false;
+    if(this.status == 200) {
+      Ti.API.info('Response ' + this.responseText);
+      var reportId = false;
 
-    reportId = JSON.parse(this.responseText).id;
+      reportId = JSON.parse(this.responseText).id;
 
-    if (reportId && currentMedia) {
-      Ti.App.fireEvent('upload_picture', { reportId: reportId });
+      if (reportId && currentMedia) {
+        Ti.App.fireEvent('upload_picture', { reportId: reportId });
+      } else {
+        if (!reportId) { Ti.API.error('Could not eval() responseText'); }
+        Ti.App.fireEvent('hide_indicator',{});
+        showSuccess();
+      }      
     } else {
-      if (!reportId) { Ti.API.error('Could not eval() responseText'); }
-      Ti.App.fireEvent('hide_indicator',{});
-      showSuccess();
+      xhrOnError;
     }
   };
   
