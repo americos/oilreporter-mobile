@@ -13,17 +13,17 @@ win.add(bgImage);
 var scrollView = Ti.UI.createScrollView({
   top: 0,
   left: 0,
-  contentHeight: 900,
+  contentHeight: 'auto',
   contentWidth: 320
 });
 
 var disclaimerLabel = Ti.UI.createLabel({
-  top: 0,
+  top: 10,
   left: 10,
   width: 300,
-  height: 800,
+  height: 'auto',
   color: '#fff',
-	font:{fontSize:16, fontWeight:'normal'},
+	font:{fontSize:14, fontWeight:'normal'},
   text: "1) Do Not Touch anything you observe! Reporting means observing from a safe location. Do not take risk to yourself, others or the wildlife. Reporting is the act of sharing what you see. Please report critical information directly to the authorities. If you find oiled wildlife please call (866) 448-5816. If you find an oiled beach please report it at (866) 448-5816.\n\n" +
         "2) Data you submit, including your location will be public data. The information collected here via Oil Reporter will be shared back out to the public via a data feed on www.oilreporter.org. It is critical that you turn your location on (see video). Without it, we can't map where you took your picture. Your data will be housed at San Diego State University.\n\n" +
         "3) Personal privacy. Your personal information will not be collected on this application. We encourage thoughtful reporting. Data retrieved on this application will be monitored. As a reminder, your location and the data you submit will be made public.\n\n" +
@@ -35,10 +35,11 @@ scrollView.add(disclaimerLabel);
 var tosButton = Ti.UI.createButton({
   width: 301,
   height: 57,
-  top: 800,
+  top: 640,
   backgroundImage: '../images/button_dark_off.png',
   backgroundSelectedImage: '../images/button_dark_on.png',
-  title: 'I accept'
+	font:{fontSize:16, fontWeight:'bold'},
+  title: 'I Accept'
 });
 tosButton.addEventListener('click', function() {
   Ti.App.fireEvent('remove_disclaimer');

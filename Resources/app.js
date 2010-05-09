@@ -56,16 +56,26 @@ tabGroup.addTab(reportTab);
 tabGroup.addTab(twitterTab);  
 tabGroup.addTab(aboutTab);  
 
+
+var disclaimerTabGroup = Titanium.UI.createTabGroup();
 var disclaimerWin = Titanium.UI.createWindow({
   url:'javascripts/disclaimer.js',
   backgroundColor:'#2f5480',
   title:'Disclaimer',
   barColor:"#333",
-  backTitle:'Close'
+  backTitle:'Close',
+  tabBarHidden:true
 });
+var disclaimerTab = Titanium.UI.createTab({  
+  title:'Disclaimer',
+  window:disclaimerWin
+});
+disclaimerTabGroup.addTab(disclaimerTab);
+
+// Ti.App.Properties.setBool('disclaimerViewed', null);
 
 Ti.App.addEventListener('remove_disclaimer', function() {
-  disclaimerWin.close();
+  disclaimerTabGroup.close();
   Ti.App.Properties.setBool('disclaimerViewed', true);
   tabGroup.open();
 });
@@ -73,7 +83,7 @@ Ti.App.addEventListener('remove_disclaimer', function() {
 if (Ti.App.Properties.getBool('disclaimerViewed') != null) {
   tabGroup.open();
 } else {
-  disclaimerWin.open();
+  disclaimerTabGroup.open();
 }
 
 
