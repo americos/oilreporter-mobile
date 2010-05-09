@@ -7,7 +7,7 @@ var aboutImage = Ti.UI.createImageView({
   url:'../images/oil_reporter_about.png',
   height:'auto',
   width:'auto'
-})
+});
 win.add(aboutImage);
 
 var chooseSitePicker = function(event) {

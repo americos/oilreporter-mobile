@@ -26,6 +26,19 @@ var twitterTab = Titanium.UI.createTab({
   window:twitterWin
 });
 
+var volunteerWin = Titanium.UI.createWindow({  
+  url:'javascripts/volunteer.js',
+  backgroundColor:'#2f5480',
+  title:'Volunteer',
+  barColor:"#333",
+  backTitle:'Back'
+});
+var volunteerTab = Titanium.UI.createTab({  
+  icon:'images/icon_about.png',
+  title:'Volunteer',
+  window:volunteerWin
+});
+
 var aboutWin = Titanium.UI.createWindow({  
   url:'javascripts/about.js',
   backgroundColor:'#2f5480',
