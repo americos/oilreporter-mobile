@@ -4,3 +4,4 @@ Resources/android/.DS_Store
 build/iphone/build/*
 build/android/bin/*
 build/.DS_Store
+build/iphone/Resources/libTiCore.a
