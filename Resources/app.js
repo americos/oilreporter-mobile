@@ -28,13 +28,13 @@ var twitterTab = Titanium.UI.createTab({
 
 var volunteerWin = Titanium.UI.createWindow({  
   url:'javascripts/volunteer.js',
-  backgroundColor:'#2f5480',
+  backgroundImage:'images/back.png',
   title:'Volunteer',
   barColor:"#333",
   backTitle:'Back'
 });
 var volunteerTab = Titanium.UI.createTab({  
-  icon:'images/icon_about.png',
+  icon:'images/icon_volunteer.png',
   title:'Volunteer',
   window:volunteerWin
 });
@@ -54,6 +54,7 @@ var aboutTab = Titanium.UI.createTab({
 
 tabGroup.addTab(reportTab);  
 tabGroup.addTab(twitterTab);  
+tabGroup.addTab(volunteerTab);  
 tabGroup.addTab(aboutTab);  
 
 
