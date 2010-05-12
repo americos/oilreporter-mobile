@@ -453,14 +453,12 @@ function showSuccess() {
   clearAllValues();
 }
 
-var xhrOnError = function(e) {
-  Ti.API.info("Error " + e.error);
+var xhrOnError = function() {
   Ti.App.fireEvent('hide_indicator',{});
   Ti.UI.createAlertDialog({
   	title:'Sorry',
   	message:'There was a problem submitting your oil report.  Please try again soon.'
   }).show();
-  
 };
 
 Ti.App.addEventListener('submit_form', function(options) {
@@ -469,28 +467,30 @@ Ti.App.addEventListener('submit_form', function(options) {
 
   var jsonData = JSON.stringify({ sighting: {
                                     description         : seeField.value,
-                                    oil_severity        : oilSlider.value,
-                                    wetland_severity    : wetSlider.value,
+                                    oil_severity        : Math.round(oilSlider.value),
+                                    wetlands_severity   : Math.round(wetSlider.value),
                                     wildlife_status     : wildlifeValue,
                                     lat                 : options.latitude,
                                     lng                 : options.longitude
-                                  }
+                                }
                                });
 
   var xhr = Titanium.Network.createHTTPClient();
   xhr.onerror = xhrOnError;
 
   xhr.onload = function() {
+    Ti.API.info(this.responseText);
+    Ti.API.info(this.status);
     if(this.status == 200) {
       Ti.API.info('Response ' + this.responseText);
       var reportId = false;
 
-      sightingId = JSON.parse(this.responseText).id;
+      sightingId = JSON.parse(this.responseText).sighting_id;
 
       if (sightingId && currentMedia) {
         Ti.App.fireEvent('upload_picture', { sightingId: sightingId });
       } else {
-        if (!reportId) { Ti.API.error('Could not eval() responseText'); }
+        if (!sightingId) { Ti.API.error('Could not eval() responseText'); }
         Ti.App.fireEvent('hide_indicator',{});
         showSuccess();
       }      
@@ -517,13 +517,14 @@ Ti.App.addEventListener('upload_picture', function(options) {
   xhr.onerror = xhrOnError;
 
   xhr.onload = function() {
+    Ti.API.info(this.status);
     Ti.API.info('response' + this.responseText);
     Ti.App.fireEvent('hide_indicator', {});
     showSuccess();
   };
 
   xhr.open('PUT', hostname + '/api/sightings/' + options.sightingId);
-  xhr.send({"sighting[media]": currentMedia, "_method": "PUT"});
+  xhr.send({"media": currentMedia, "_method": "PUT"});
 });
 
 var submitButton = Titanium.UI.createButton({title:'Send'});

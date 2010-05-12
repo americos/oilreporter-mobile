@@ -14,6 +14,9 @@ public class OilReporterAppInfo implements ITiAppInfo
 	private static final String LCAT = "AppInfo";
 	
 	public OilReporterAppInfo(TiApplication app) {
+		TiProperties properties = app.getAppProperties();
+					
+		properties.setString("ti.deploytype", "test");
 	}
 	
 	public String getId() {
@@ -53,6 +56,6 @@ public class OilReporterAppInfo implements ITiAppInfo
 	}
 	
 	public String getGUID() {
-		return "None";
+		return "0c5d028b-bc51-49e4-a79b-00fe7cab80b9";
 	}
 }
