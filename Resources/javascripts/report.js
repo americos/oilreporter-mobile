@@ -5,7 +5,7 @@ var properties = Ti.App.Properties;
 var currentImageView;
 var currentImageAdded = false;
 var wildlifeValue = "No wildlife present";
-var hostname = "http://oilreporter.heroku.com";
+var hostname = "http://gulfcoastspill.com";
 
 // See
 var scrollView = Ti.UI.createScrollView({
@@ -467,13 +467,13 @@ Ti.App.addEventListener('submit_form', function(options) {
   if (options.latitude == null) { options.latitude = 0.0; }
   if (options.longitude == null) { options.longitude = 0.0; }
 
-  var jsonData = JSON.stringify({ report: {
-                                    description: seeField.value,
-                                    oil        : oilSlider.value,
-                                    wetlands   : wetSlider.value,
-                                    wildlife   : wildlifeValue,
-                                    latitude   : options.latitude,
-                                    longitude  : options.longitude
+  var jsonData = JSON.stringify({ sighting: {
+                                    description         : seeField.value,
+                                    oil_severity        : oilSlider.value,
+                                    wetland_severity    : wetSlider.value,
+                                    wildlife_status     : wildlifeValue,
+                                    lat                 : options.latitude,
+                                    lng                 : options.longitude
                                   }
                                });
 
@@ -485,10 +485,10 @@ Ti.App.addEventListener('submit_form', function(options) {
       Ti.API.info('Response ' + this.responseText);
       var reportId = false;
 
-      reportId = JSON.parse(this.responseText).id;
+      sightingId = JSON.parse(this.responseText).id;
 
-      if (reportId && currentMedia) {
-        Ti.App.fireEvent('upload_picture', { reportId: reportId });
+      if (sightingId && currentMedia) {
+        Ti.App.fireEvent('upload_picture', { sightingId: sightingId });
       } else {
         if (!reportId) { Ti.API.error('Could not eval() responseText'); }
         Ti.App.fireEvent('hide_indicator',{});
@@ -501,14 +501,14 @@ Ti.App.addEventListener('submit_form', function(options) {
   
   Ti.API.info("About to submit ..." + jsonData);
   
-  xhr.open('POST', hostname + '/reports');
+  xhr.open('POST', hostname + '/api/sightings');
   xhr.setRequestHeader('Content-Type', 'application/json');
   xhr.setRequestHeader('Accept', 'application/json');
   xhr.send(jsonData);
 });
 
 Ti.App.addEventListener('upload_picture', function(options) {
-  if (options.reportId == null) {
+  if (options.sightingId == null) {
     xhrOnError({ error: 'No report id' });
     return;
   }
@@ -522,8 +522,8 @@ Ti.App.addEventListener('upload_picture', function(options) {
     showSuccess();
   };
 
-  xhr.open('PUT', hostname + '/reports/' + options.reportId);
-  xhr.send({"report[media]": currentMedia, "_method": "PUT"});
+  xhr.open('PUT', hostname + '/api/sightings/' + options.sightingId);
+  xhr.send({"sighting[media]": currentMedia, "_method": "PUT"});
 });
 
 var submitButton = Titanium.UI.createButton({title:'Send'});
