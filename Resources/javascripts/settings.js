@@ -9,7 +9,9 @@ function buildRows() {
   data[0] = Ti.UI.createTableViewSection({headerTitle:'Organization Information'});
 	
 	var orgRow = Ti.UI.createTableViewRow({height:50});
-	orgRow.selectionStyle = Ti.UI.iPhone.TableViewCellSelectionStyle.NONE;
+	if(Ti.Platform.name != 'android') {
+  	orgRow.selectionStyle = Ti.UI.iPhone.TableViewCellSelectionStyle.NONE;
+	}
 	orgRow.className = 'control';
 	
 	var orgLabel = Ti.UI.createLabel({
@@ -26,7 +28,7 @@ function buildRows() {
   
 	orgField = Titanium.UI.createTextField({
 		color:'#000',
-		value:(properties.getString("orgId") == null ? '' : properties.getString("orgId")),
+		value:(properties.hasProperty("orgId") ? properties.getString("orgId") : ''),
   	hintText:'Optional ID',
 		autocorrect:false,
 		height:30,

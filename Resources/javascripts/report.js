@@ -141,7 +141,7 @@ var oilTitleLabel = Ti.UI.createLabel({
   height: 30,
   color: '#fff',
 	font:{fontSize:18, fontWeight:'bold'},
-  text:"How Much Oil Do You See? (3)"
+  text:"How Much Oil Do You See? (5)"
 });
 oilView.add(oilTitleLabel);
 
@@ -152,7 +152,7 @@ var oilDescLabel = Ti.UI.createLabel({
   height: 30,
   color: '#eee',
 	font:{fontSize:12, fontWeight:'normal'},
-  text:"0 is open water, 5 is thick oil"
+  text:"0 is open water, 10 is thick oil"
 });
 oilView.add(oilDescLabel);
 
@@ -162,8 +162,8 @@ var oilSlider = Ti.UI.createSlider({
   width: 280,
   height: "auto",
   min: 0,
-  max: 5,
-  value:3,
+  max: 10,
+  value:5,
   enabled: true
 });
 oilView.add(oilSlider);
@@ -234,7 +234,7 @@ var wetTitleLabel = Ti.UI.createLabel({
   height: 30,
   color: '#fff',
 	font:{fontSize:18, fontWeight:'bold'},
-  text:"Impact to The Wetlands? (3)"
+  text:"Impact to The Wetlands? (5)"
 });
 wetView.add(wetTitleLabel);
 
@@ -245,7 +245,7 @@ var wetDescLabel = Ti.UI.createLabel({
   height: 30,
   color: '#eee',
 	font:{fontSize:12, fontWeight:'normal'},
-  text:"0 is no impact, 5 is severe impact"
+  text:"0 is no impact, 10 is severe impact"
 });
 wetView.add(wetDescLabel);
 
@@ -255,8 +255,8 @@ var wetSlider = Ti.UI.createSlider({
   width: 280,
   height: "auto",
   min: 0,
-  max: 5,
-  value:3,
+  max: 10,
+  value:5,
   enabled: true
 });
 wetView.add(wetSlider);
@@ -476,17 +476,17 @@ Ti.App.addEventListener('submit_form', function(options) {
   if (options.latitude == null) { options.latitude = 0.0; }
   if (options.longitude == null) { options.longitude = 0.0; }
 
-  var jsonData = JSON.stringify({ sighting: {
-                                    description         : seeField.value,
-                                    oil_severity        : Math.round(oilSlider.value),
-                                    wetlands_severity   : Math.round(wetSlider.value),
-                                    wildlife_status     : wildlifeValue,
-                                    lat                 : options.latitude,
-                                    lng                 : options.longitude,
-                                    organization_id     : (properties.getString("orgId") == null ? null : properties.getString("orgId"))
-                                }
+  var jsonData = JSON.stringify({ report: {
+                                    description       : seeField.value,
+                                    oil               : oilSlider.value,
+                                    wetlands          : wetSlider.value,
+                                    wildlife          : wildlifeValue,
+                                    latitude          : options.latitude,
+                                    longitude         : options.longitude
+                                    organization_id   : (properties.getString("orgId") == null ? null : properties.getString("orgId"))
+                                  }
                                });
-
+                               
   var xhr = Titanium.Network.createHTTPClient();
   xhr.onerror = xhrOnError;
 
@@ -497,12 +497,12 @@ Ti.App.addEventListener('submit_form', function(options) {
       Ti.API.info('Response ' + this.responseText);
       var reportId = false;
 
-      sightingId = JSON.parse(this.responseText).sighting_id;
+      reportId = JSON.parse(this.responseText).id;
 
-      if (sightingId && currentMedia) {
-        Ti.App.fireEvent('upload_picture', { sightingId: sightingId });
+      if (reportId && currentMedia) {
+        Ti.App.fireEvent('upload_picture', { reportId: reportId });
       } else {
-        if (!sightingId) { Ti.API.error('Could not eval() responseText'); }
+        if (!reportId) { Ti.API.error('Could not eval() responseText'); }
         Ti.App.fireEvent('hide_indicator',{});
         showSuccess();
       }      
@@ -513,14 +513,14 @@ Ti.App.addEventListener('submit_form', function(options) {
   
   Ti.API.info("About to submit ..." + jsonData);
   
-  xhr.open('POST', hostname + '/api/sightings');
+  xhr.open('POST', hostname + '/reports');
   xhr.setRequestHeader('Content-Type', 'application/json');
   xhr.setRequestHeader('Accept', 'application/json');
   xhr.send(jsonData);
 });
 
 Ti.App.addEventListener('upload_picture', function(options) {
-  if (options.sightingId == null) {
+  if (options.reportId == null) {
     xhrOnError({ error: 'No report id' });
     return;
   }
@@ -535,7 +535,7 @@ Ti.App.addEventListener('upload_picture', function(options) {
     showSuccess();
   };
 
-  xhr.open('PUT', hostname + '/api/sightings/' + options.sightingId);
+  xhr.open('PUT', hostname + '/reports/' + options.reportId);
   xhr.send({"media": currentMedia, "_method": "PUT"});
 });
 

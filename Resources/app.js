@@ -54,7 +54,6 @@ var aboutTab = Titanium.UI.createTab({
 
 var settingsWin = Titanium.UI.createWindow({  
   url:'javascripts/settings.js',
-  backgroundColor:'#2f5480',
   title:'Settings',
   barColor:"#333",
   backTitle:'Back'
