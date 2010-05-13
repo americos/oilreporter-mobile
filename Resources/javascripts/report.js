@@ -6,7 +6,7 @@ var properties = Ti.App.Properties;
 var currentImageView;
 var currentImageAdded = false;
 var wildlifeValue = "No wildlife present";
-var hostname = "http://gulfcoastspill.com";
+var hostname = "http://oilreporter.org";
 
 if(Ti.Platform.name == 'android') {
   var bgImage = Ti.UI.createImageView({
@@ -482,7 +482,7 @@ Ti.App.addEventListener('submit_form', function(options) {
                                     wetlands          : wetSlider.value,
                                     wildlife          : wildlifeValue,
                                     latitude          : options.latitude,
-                                    longitude         : options.longitude
+                                    longitude         : options.longitude,
                                     organization_id   : (properties.getString("orgId") == null ? null : properties.getString("orgId"))
                                   }
                                });
@@ -507,7 +507,11 @@ Ti.App.addEventListener('submit_form', function(options) {
         showSuccess();
       }      
     } else {
-      xhrOnError;
+      Ti.App.fireEvent('hide_indicator',{});
+      Ti.UI.createAlertDialog({
+      	title:'Sorry',
+      	message:'There was a problem submitting your oil report.  Please try again soon.'
+      }).show();
     }
   };
   

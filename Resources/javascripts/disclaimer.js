@@ -5,7 +5,7 @@ var properties = Ti.App.Properties;
 var bgImage = Ti.UI.createImageView({
   top:0,
   left:0,
-  url:'../images/back.png',
+  url:'../images/about.png',
   height:'auto',
   width:'auto'
 });
@@ -29,7 +29,7 @@ var disclaimerLabel = Ti.UI.createLabel({
         "2) Data you submit, including your location will be public data. The information collected here via Oil Reporter will be shared back out to the public via a data feed on www.oilreporter.org. It is critical that you turn your location on (see video). Without it, we can't map where you took your picture. Your data will be housed at San Diego State University.\n\n" +
         "3) Personal privacy. Your personal information will not be collected on this application. We encourage thoughtful reporting. Data retrieved on this application will be monitored. As a reminder, your location and the data you submit will be made public.\n\n" +
         "If you at any time wish to contact CrisisCommons, please email us at oilreporter@crisiscommons.org\n\n" +
-        "Privacy Statement (Link: www.crisiscommons.org/privacy)\n\nTerms of Service (www.crisiscommons.org/tos)"
+        "Privacy Statement (crisiscommons.org/privacy)\n\nTerms of Service (crisiscommons.org/tos)"
 });
 scrollView.add(disclaimerLabel);
 

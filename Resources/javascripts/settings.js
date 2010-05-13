@@ -15,7 +15,7 @@ function buildRows() {
 	orgRow.className = 'control';
 	
 	var orgLabel = Ti.UI.createLabel({
-  	color:'#444',
+  	color:(Ti.Platform.name == "android" ? '#fff' : '#444'),
   	font:{fontSize:14, fontWeight:'bold'},
   	text:"Organization ID",
   	top:16,
@@ -31,15 +31,17 @@ function buildRows() {
 		value:(properties.hasProperty("orgId") ? properties.getString("orgId") : ''),
   	hintText:'Optional ID',
 		autocorrect:false,
-		height:30,
+		height:(Ti.Platform.name == "android" ? 40 : 30),
 		top:9,
 		left:130,
-		width:154,
+		height:(Ti.Platform.name == "android" ? 164 : 154),
   	font:{fontSize:14, fontWeight:'normal'},
 		clearButtonMode: Titanium.UI.INPUT_BUTTONMODE_ALWAYS,
 		borderStyle:Titanium.UI.INPUT_BORDERSTYLE_NONE
 	});	
 	orgRow.add(orgField);
+	
+	
 	data[0].add(orgRow);
 	
 }
@@ -56,13 +58,31 @@ win.add(tableView);
 
 var saveButton = Titanium.UI.createButton({systemButton:Titanium.UI.iPhone.SystemButton.SAVE});
 saveButton.addEventListener('click',function(){
+  saveSettings();
+
+});
+win.setRightNavButton(saveButton);
+
+
+if(Ti.Platform.name == "android") {
+  var menu = Ti.UI.Android.OptionMenu.createMenu();
+  var saveItem = Ti.UI.Android.OptionMenu.createMenuItem({
+      title : 'Save Settings'
+  });
+  saveItem.addEventListener('click', function(){
+    saveSettings();
+  });
+
+  menu.add(saveItem);
+  Ti.UI.Android.OptionMenu.setMenu(menu); 
+}
+
+function saveSettings() {
   properties.setString('orgId',orgField.value);
 
   var alert = Titanium.UI.createAlertDialog({
   	title:'Saved!',
   	message:'Your organization ID has been saved.  This will be sent with each report.'
   });
-  alert.show(); 
-
-});
-win.setRightNavButton(saveButton);
+  alert.show();   
+}

@@ -8,151 +8,6 @@ var tableView;
 var data = [];
 var rowData = [];
 
-function retweet(id,tweet) {
-  Titanium.App.fireEvent("show_indicator",{title:'Retweeting'});
-  var statusAlert;
-  var url = "http://"+properties.getString("twitUsername")+":"+properties.getString("twitPassword")+"@api.twitter.com/1/statuses/retweet/"+id+".json";
-	var xhr = Ti.Network.createHTTPClient();
-  Ti.API.info(url);
-	xhr.open("POST",url);
-	xhr.onreadystatechange = function() {
-    if (this.readyState == 4) {
-      Titanium.App.fireEvent("hide_indicator");
-      if(this.status == 200) {
-        statusAlert = Titanium.UI.createAlertDialog({
-        	title:'Success!',
-        	message:'This tweet has been successfully retweeted from your account.'
-        });
-      } else if(this.status == 401) {
-		Ti.API.info('401');
-        statusAlert = Titanium.UI.createAlertDialog({
-        	title:'Oops!',
-        	message:'There seems to have been a problem with your username or password.'
-        });
-      } else {
-		Ti.API.info('Other error');
-		Ti.API.info('Status: ' + this.status);
-		Ti.API.info(this.responseText);
-        statusAlert = Titanium.UI.createAlertDialog({
-        	title:'Oops!',
-        	message:'Sorry, there was an issue trying to retweet this tweet.'
-        });
-      }
-      statusAlert.show();
-		}
-	};
-	xhr.send();
-}
-
-function emailTweet(id,tweet) {
-	var emailDialog = Titanium.UI.createEmailDialog();
-  emailDialog.setMessageBody(tweet +"\n\n" + "http://twitter.com/"+TWITTER_ACCOUNT);
-  emailDialog.setSubject("I wanted to share a tweet with you");
-  emailDialog.setBarColor(DEFAULT_BAR_COLOR);
-  emailDialog.open();
-}
-
-function followOnTwitter() {
-  Titanium.API.info('follow!');
-  var id = 'foo';
-  var tweet = 'bar';
-  Titanium.App.fireEvent("show_indicator",{title:'Following'});
-  var statusAlert;
-  var url = "http://"+properties.getString("twitUsername")+":"+properties.getString("twitPassword")+"@api.twitter.com/1/friendships/create/"+TWITTER_ACCOUNT+".json";
-	var xhr = Ti.Network.createHTTPClient();
-  Ti.API.info(url);
-	xhr.open("POST",url);
-	xhr.onreadystatechange = function() {
-    if (this.readyState == 4) {
-      Titanium.App.fireEvent("hide_indicator");
-      if(this.status == 200) {
-        statusAlert = Titanium.UI.createAlertDialog({
-        	title:'Success!',
-        	message:'You are now following us on Twitter!'
-        });
-      } else if(this.status == 403) {
-        statusAlert = Titanium.UI.createAlertDialog({
-        	title:'Oops!',
-        	message:'Twitter says you are already following this user.'
-        });
-      } else if(this.status == 401) {
-        statusAlert = Titanium.UI.createAlertDialog({
-        	title:'Oops!',
-        	message:'There seems to have been a problem with your username or password.'
-        });
-      } else {
-		Ti.API.info('Other error');
-		Ti.API.info('Status: ' + this.status);
-		Ti.API.info(this.responseText);
-        statusAlert = Titanium.UI.createAlertDialog({
-        	title:'Oops!',
-        	message:'Sorry, there was an issue trying to follow this user.'
-        });
-      }
-      statusAlert.show();
-		}
-	};
-	xhr.send();
-}
-
-function presentOptionDialog(id, tweet) {
-  if(tweet != null && id != null && !isBlank(properties.getString("twitUsername")) && !isBlank(properties.getString("twitPassword"))) {
-    var dialog = Titanium.UI.createOptionDialog({
-    	title:tweet
-    });
-    dialog.options = ["Retweet This","Share by E-Mail","Cancel"];
-    dialog.cancel = 2;
-    dialog.addEventListener("click",function(e){
-      if(e.index == 0) {
-        retweet(id,tweet);
-      } else if(e.index == 1) {
-        emailTweet(id,tweet);
-      }
-    });
-    dialog.show();
-  } else {
-    var errorAlert = Titanium.UI.createAlertDialog({
-    	title:'Oops!',
-    	message:'You need to have your Twitter credentials saved before you can perform any actions on this tweet.  Would you like to do this?'
-    });
-    errorAlert.buttonNames = ['Yes', 'No'];
-  	errorAlert.addEventListener("click",function(e) {
-  	  if(e.index == 0) {
-  	    Titanium.UI.currentTabGroup.tabs[4].active = true;
-  	  }
-  	});
-  	errorAlert.show();
-  }
-}
-
-function presentFollowOptionDialog() {
-  if(!isBlank(properties.getString("twitUsername")) && !isBlank(properties.getString("twitPassword"))) {
-    var followDialog = Titanium.UI.createOptionDialog({
-    	title:'Follow on Twitter?'
-    });
-    followDialog.options = ["Follow","Cancel"];
-    followDialog.cancel = 1;
-    followDialog.addEventListener("click",function(e){
-      if(e.index == 0) {
-		followOnTwitter();
-      }
-    });
-    followDialog.show();
-  } else {
-    var errorAlert = Titanium.UI.createAlertDialog({
-    	title:'Oops!',
-    	message:'You need to have your Twitter credentials saved before you can perform any actions on this tweet.  Would you like to do this?'
-    });
-    errorAlert.buttonNames = ['Yes', 'No'];
-  	errorAlert.addEventListener("click",function(e) {
-  	  if(e.index == 0) {
-  	    Titanium.UI.currentTabGroup.tabs[4].active = true;
-  	  }
-  	});
-  	errorAlert.show();
-  }
-}
-
 function buildData(tweet) {
 	var row = Ti.UI.createTableViewRow();
   row.height = 'auto';
@@ -208,7 +63,7 @@ function buildData(tweet) {
   var tweetLabel = Ti.UI.createLabel({
   	color:'#fff',
   	font:{fontSize:14, fontWeight:'normal'},
-  	text:tweet.text+"\n\n",
+  	text:(tweet.text.replace(/&amp;/g,"&"))+"\n\n",
   	top:30,
   	left:68,
   	width:236,
@@ -272,9 +127,6 @@ function retrieveTwitterFeed() {
 					data:data
 				});
 				
-				tableView.addEventListener("click",function(e){
-				  presentOptionDialog(e.rowData.tweetId,e.rowData.tweetText);
-				});
         win.add(tableView);
 			} else {
 				tableView.setData(data,{animationStyle:Titanium.UI.iPhone.RowAnimationStyle.UP});
