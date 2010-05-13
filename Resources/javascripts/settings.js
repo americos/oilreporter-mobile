@@ -34,7 +34,7 @@ function buildRows() {
 		height:(Ti.Platform.name == "android" ? 40 : 30),
 		top:9,
 		left:130,
-		height:(Ti.Platform.name == "android" ? 164 : 154),
+		width:(Ti.Platform.name == "android" ? 164 : 154),
   	font:{fontSize:14, fontWeight:'normal'},
 		clearButtonMode: Titanium.UI.INPUT_BUTTONMODE_ALWAYS,
 		borderStyle:Titanium.UI.INPUT_BORDERSTYLE_NONE
