@@ -150,7 +150,7 @@ var oilSlider = Ti.UI.createSlider({
   width: 280,
   height: "auto",
   min: 0,
-  max: 10,
+  max: 5,
   value:5,
   enabled: true
 });
@@ -244,7 +244,7 @@ var wetSlider = Ti.UI.createSlider({
   width: 280,
   height: "auto",
   min: 0,
-  max: 10,
+  max: 5,
   value:5,
   enabled: true
 });
