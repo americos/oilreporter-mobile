@@ -447,6 +447,7 @@ Titanium.UI.currentWindow.setLeftNavButton(clearButton);
 
 function clearAllValues(){
   oilSlider.value = 5;
+  wetSlider.value = 5;
   seeField.value = "";
   image = null;
   currentMedia = null;
