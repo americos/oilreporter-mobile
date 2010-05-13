@@ -1,6 +1,18 @@
 Titanium.include('../javascripts/application.js');
 var win = Titanium.UI.currentWindow;
 
+
+if(Ti.Platform.name == 'android') {
+  var bgImage = Ti.UI.createImageView({
+    top:0,
+    left:0,
+    url:'../images/back.png',
+    height:'auto',
+    width:'auto'
+  });
+  win.add(bgImage);
+}
+
 // ALABAMA
 
 var alabamaView = Ti.UI.createView({
@@ -144,7 +156,8 @@ win.add(floridaView);
 
 
 var volunteerLabel = Ti.UI.createLabel({
-  top: 240,
+  top: (Ti.Platform.name != 'android' ? 240 : 250),
+  width: 320,
   left: 0,
   font:{fontSize:16, fontWeight:'normal'},
   color:'#fff',

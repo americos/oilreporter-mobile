@@ -78,6 +78,7 @@ var disclaimerWin = Titanium.UI.createWindow({
   title:'Disclaimer',
   barColor:"#333",
   backTitle:'Close',
+  navBarHidden:(Titanium.Platform.name == 'android' ? true : false),
   tabBarHidden:true
 });
 var disclaimerTab = Titanium.UI.createTab({  
@@ -86,17 +87,17 @@ var disclaimerTab = Titanium.UI.createTab({
 });
 disclaimerTabGroup.addTab(disclaimerTab);
 
-// Ti.App.Properties.setBool('disclaimerViewed', null);
-
 Ti.App.addEventListener('remove_disclaimer', function() {
   disclaimerTabGroup.close();
   Ti.App.Properties.setBool('disclaimerViewed', true);
   tabGroup.open();
 });
 
-if (Ti.App.Properties.getBool('disclaimerViewed') != null) {
+Ti.API.info("0");
+if (Ti.App.Properties.hasProperty('disclaimerViewed')) {
   tabGroup.open();
 } else {
+  Ti.API.info("1");
   disclaimerTabGroup.open();
 }
 

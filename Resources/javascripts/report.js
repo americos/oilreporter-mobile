@@ -1,11 +1,23 @@
 Titanium.include('../javascripts/application.js');
 
 var win = Ti.UI.currentWindow;
+
 var properties = Ti.App.Properties;
 var currentImageView;
 var currentImageAdded = false;
 var wildlifeValue = "No wildlife present";
 var hostname = "http://gulfcoastspill.com";
+
+if(Ti.Platform.name == 'android') {
+  var bgImage = Ti.UI.createImageView({
+    top:0,
+    left:0,
+    url:'../images/back.png',
+    height:'auto',
+    width:'auto'
+  });
+  win.add(bgImage);
+}
 
 // See
 var scrollView = Ti.UI.createScrollView({
@@ -66,7 +78,7 @@ var mediaLabel = Ti.UI.createLabel({
   text:'Add Photo or Video'
 });
 var mediaDescLabel = Ti.UI.createLabel({
-  top: 120,
+  top: (Ti.Platform.name != 'android' ? 120 : 128),
   left: 70,
   width: 280,
   height: 30,
@@ -129,7 +141,7 @@ var oilTitleLabel = Ti.UI.createLabel({
   height: 30,
   color: '#fff',
 	font:{fontSize:18, fontWeight:'bold'},
-  text:"How Much Oil Do You See? (5)"
+  text:"How Much Oil Do You See? (3)"
 });
 oilView.add(oilTitleLabel);
 
@@ -140,7 +152,7 @@ var oilDescLabel = Ti.UI.createLabel({
   height: 30,
   color: '#eee',
 	font:{fontSize:12, fontWeight:'normal'},
-  text:"0 is open water, 10 is thick oil"
+  text:"0 is open water, 5 is thick oil"
 });
 oilView.add(oilDescLabel);
 
@@ -151,7 +163,7 @@ var oilSlider = Ti.UI.createSlider({
   height: "auto",
   min: 0,
   max: 5,
-  value:5,
+  value:3,
   enabled: true
 });
 oilView.add(oilSlider);
@@ -161,7 +173,6 @@ oilSlider.addEventListener('change',function(e) {
 });
 
 scrollView.add(oilView);
-
 
 // Wildlife
 var wildView = Ti.UI.createView({
@@ -178,7 +189,7 @@ var wildTitleLabel = Ti.UI.createLabel({
   width: 300,
   height: 30,
   color: '#fff',
-	font:{fontSize:18, fontWeight:'bold'},
+ font:{fontSize:18, fontWeight:'bold'},
   text:"Is There Wildlife Present?"
 });
 wildView.add(wildTitleLabel);
@@ -198,9 +209,9 @@ html +="</body></html>";
 
 var wildWebView = Ti.UI.createWebView({
   top: 35,
-  left: 00,
-  width: 290,
-  height: 44,
+  left: 0,
+  width: (Ti.Platform.name != 'android' ? 290 : 300),
+  height: (Ti.Platform.name != 'android' ? 44 : 48),
   html:html
 });
 wildView.add(wildWebView);
@@ -223,7 +234,7 @@ var wetTitleLabel = Ti.UI.createLabel({
   height: 30,
   color: '#fff',
 	font:{fontSize:18, fontWeight:'bold'},
-  text:"Impact to The Wetlands? (5)"
+  text:"Impact to The Wetlands? (3)"
 });
 wetView.add(wetTitleLabel);
 
@@ -234,7 +245,7 @@ var wetDescLabel = Ti.UI.createLabel({
   height: 30,
   color: '#eee',
 	font:{fontSize:12, fontWeight:'normal'},
-  text:"0 is no impact, 10 is severe impact"
+  text:"0 is no impact, 5 is severe impact"
 });
 wetView.add(wetDescLabel);
 
@@ -245,7 +256,7 @@ var wetSlider = Ti.UI.createSlider({
   height: "auto",
   min: 0,
   max: 5,
-  value:5,
+  value:3,
   enabled: true
 });
 wetView.add(wetSlider);
@@ -257,7 +268,7 @@ wetSlider.addEventListener('change',function(e) {
 scrollView.add(wetView);
 
 var reportShoreLabel = Ti.UI.createLabel({
-  top: 370,
+  top: (Ti.Platform.name != 'android' ? 370 : 500),
   left: 0,
   width:320,
   font:{fontSize:14, fontWeight:'normal'},

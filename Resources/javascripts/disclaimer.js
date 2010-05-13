@@ -37,7 +37,7 @@ var orgView = Ti.UI.createView({
   top: 520,
   left: 10,
   width: 300,
-  height: 84,
+  height: (Ti.Platform.name == 'android' ? 94 : 84),
   backgroundColor:'#333',
   borderRadius:6
 });
@@ -58,7 +58,7 @@ var orgField = Titanium.UI.createTextField({
 	value:'',
 	hintText:'Special ID for your organization',
 	autocorrect:false,
-	height:30,
+	height:(Ti.Platform.name == 'android' ? 40 : 30),
 	top:40,
 	left:10,
 	width:280,
@@ -73,10 +73,11 @@ scrollView.add(orgView);
 var tosButton = Ti.UI.createButton({
   width: 301,
   height: 57,
-  top: 620,
+  top: (Ti.Platform.name == 'android' ? 630 : 620),
   backgroundImage: '../images/button_dark_off.png',
   backgroundSelectedImage: '../images/button_dark_on.png',
 	font:{fontSize:16, fontWeight:'bold'},
+	color:"#fff",
   title: 'I Accept'
 });
 tosButton.addEventListener('click', function() {

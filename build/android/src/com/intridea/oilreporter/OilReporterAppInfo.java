@@ -13,10 +13,11 @@ public class OilReporterAppInfo implements ITiAppInfo
 {
 	private static final String LCAT = "AppInfo";
 	
+	
 	public OilReporterAppInfo(TiApplication app) {
-		TiProperties properties = app.getAppProperties();
+		TiProperties properties = app.getSystemProperties();
 					
-		properties.setString("ti.deploytype", "test");
+		properties.setString("ti.deploytype", "development");
 	}
 	
 	public String getId() {
@@ -32,23 +33,23 @@ public class OilReporterAppInfo implements ITiAppInfo
 	}
 	
 	public String getPublisher() {
-		return "not specified";
+		return "blim";
 	}
 	
 	public String getUrl() {
-		return "not specified";
+		return "http://oilreporter.org";
 	}
 	
 	public String getCopyright() {
-		return "not specified";
+		return "2010 by blim";
 	}
 	
 	public String getDescription() {
-		return "not specified";
+		return "No description provided";
 	}
 	
 	public String getIcon() {
-		return "appicon.png";
+		return "default_app_logo.png";
 	}
 	
 	public boolean isAnalyticsEnabled() {
@@ -57,5 +58,13 @@ public class OilReporterAppInfo implements ITiAppInfo
 	
 	public String getGUID() {
 		return "0c5d028b-bc51-49e4-a79b-00fe7cab80b9";
+	}
+	
+	public boolean isFullscreen() {
+		return false;
+	}
+	
+	public boolean isNavBarHidden() {
+		return false;
 	}
 }
