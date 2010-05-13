@@ -471,7 +471,8 @@ Ti.App.addEventListener('submit_form', function(options) {
                                     wetlands_severity   : Math.round(wetSlider.value),
                                     wildlife_status     : wildlifeValue,
                                     lat                 : options.latitude,
-                                    lng                 : options.longitude
+                                    lng                 : options.longitude,
+                                    organization_id     : (properties.getString("orgId") == null ? null : properties.getString("orgId"))
                                 }
                                });
 
