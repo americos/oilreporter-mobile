@@ -563,17 +563,28 @@ function submitReport() {
   } else if(seeField.value != null && seeField.value != "" && seeField.value.length > 0) {
     Ti.App.fireEvent('show_indicator', { title: 'Locating' });
 
-    Titanium.Geolocation.getCurrentPosition(function(e) {
-      Ti.App.fireEvent('change_title', { title: 'Submitting' });
-  		Ti.API.info("Received geolocation response");
+    if (Ti.Geolocation.locationServicesEnabled == true) {
+      Titanium.Geolocation.getCurrentPosition(function(e) {
+        Ti.App.fireEvent('change_title', { title: 'Submitting' });
+    		Ti.API.info("Received geolocation response");
       
-  		if (e.error) {
-  		  Ti.API.error("Could not determine location");
-  		  Ti.App.fireEvent('submit_form', {});
-  		} else {
-  		  Ti.App.fireEvent('submit_form', { latitude: e.coords.latitude, longitude: e.coords.longitude });
-      }
-  	});
+    		if (e.error) {
+          Ti.App.fireEvent('hide_indicator',{});
+        	Titanium.UI.createAlertDialog({
+        	  title:"Location Required",
+        	  message:"There was a problem trying to retrieve your location.  Please try again soon."
+        	}).show();
+    		} else {
+    		  Ti.App.fireEvent('submit_form', { latitude: e.coords.latitude, longitude: e.coords.longitude });
+        }
+    	});
+    } else {
+      Ti.App.fireEvent('hide_indicator',{});
+      Titanium.UI.createAlertDialog({
+    	  title:"Location Required",
+    	  message:"Sorry, you need to have location services enabled to be able to submit reports."
+    	}).show();
+    }
   } else {
     Ti.UI.createAlertDialog({
     	title:'Sorry!',

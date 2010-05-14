@@ -5,3 +5,7 @@ build/iphone/build/*
 build/android/bin/*
 build/.DS_Store
 build/iphone/Resources/libTiCore.a
+build/iphone/Classes/*
+build/iphone/lib/*
+build/iphone/headers/*
+build/iphone/project.*
