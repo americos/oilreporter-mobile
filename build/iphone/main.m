@@ -18,8 +18,8 @@ NSString * const TI_APPLICATION_COPYRIGHT = @"2010 by blim";
 NSString * const TI_APPLICATION_GUID = @"0c5d028b-bc51-49e4-a79b-00fe7cab80b9";
 BOOL const TI_APPLICATION_ANALYTICS = true;
 
-#ifdef DEBUG
-NSString * const TI_APPLICATION_RESOURCE_DIR = @"/code/titanium/Oil Reporter/build/iphone/build/Debug-iphonesimulator/Oil Reporter.app";
+#ifdef TARGET_IPHONE_SIMULATOR
+NSString * const TI_APPLICATION_RESOURCE_DIR = @"/code/titanium/Oil Reporter/Resources";
 #endif
 
 int main(int argc, char *argv[]) {

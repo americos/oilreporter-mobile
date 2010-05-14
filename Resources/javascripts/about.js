@@ -10,7 +10,11 @@ var aboutImage = Ti.UI.createImageView({
 });
 win.add(aboutImage);
 
-var  html = "<p>Oil Reporter was built by <a href='http://intridea.com' style='color:#000060; font-weight:bold;'>Intridea</a> for <a href='http://crisiscommons.org' style='color:#000060; font-weight:bold;'>CrisisCommons</a> " +
+Ti.App.addEventListener("openURL", function(e){
+  Ti.Platform.openURL(e.url);
+});
+
+var  html = "<p>Oil Reporter was built by <a href=\"javascript:Ti.App.fireEvent('openURL',{url:'http://intridea.com'});\" style='color:#000060; font-weight:bold;'>Intridea</a> for <a href=\"javascript:Ti.App.fireEvent('openURL',{url:'http://crisiscommons.org'});\" style='color:#000060; font-weight:bold;'>CrisisCommons</a> " +
             "to provide trained response volunteers and citizens with   " +
             "an opportunity to share what they see via their mobile     " +
             "phone and for that data to be shared back to the public.</p> " +
@@ -29,7 +33,7 @@ var  html = "<p>Oil Reporter was built by <a href='http://intridea.com' style='c
             "GPS enabled smart phones like this one, submissions        " +
             "will be able to be geolocated onto a map and shared        " +
             "back to the public via a public data feed on               " +
-            "<a href='http://oilreporter.org/data' style='color:#000060; font-weight:bold;'>oilreporter.org/data</a> so that response" +
+            "<a href=\"javascript:Ti.App.fireEvent('openURL',{url:'http://oilreporter.org/reports'});\" style='color:#000060; font-weight:bold;'>oilreporter.org/reports</a> so that response" +
             "organizations can use this data for better understanding   " +
             "of needs andresponse operations.</p>                       " +
             "                                                           " +

@@ -1,3 +1,4 @@
+Titanium.include('../javascripts/keys.js');
 Titanium.include('../javascripts/application.js');
 
 var win = Ti.UI.currentWindow;
@@ -477,13 +478,15 @@ Ti.App.addEventListener('submit_form', function(options) {
   if (options.latitude == null) { options.latitude = 0.0; }
   if (options.longitude == null) { options.longitude = 0.0; }
 
-  var jsonData = JSON.stringify({ description       : seeField.value,
+  var jsonData = JSON.stringify({ api_key           : api_key,
+                                  description       : seeField.value,
                                   oil               : oilSlider.value,
                                   wetlands          : wetSlider.value,
                                   wildlife          : wildlifeValue,
                                   latitude          : options.latitude,
                                   longitude         : options.longitude,
-                                  organization_id   : (properties.getString("orgId") == null ? null : properties.getString("orgId"))
+                                  organization_id   : (properties.getString("orgId") == null ? null : properties.getString("orgId")),
+                                  device_id         : Ti.Platform.id
                                });
                                
   var xhr = Titanium.Network.createHTTPClient();
@@ -539,7 +542,7 @@ Ti.App.addEventListener('upload_picture', function(options) {
   };
 
   xhr.open('PUT', hostname + '/reports/' + options.reportId);
-  xhr.send({"media": currentMedia, "_method": "PUT"});
+  xhr.send({ "api_key" : api_key, "media": currentMedia, "_method": "PUT" });
 });
 
 var submitButton = Titanium.UI.createButton({title:'Send'});
