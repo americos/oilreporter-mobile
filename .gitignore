@@ -9,3 +9,4 @@ build/iphone/Classes/*
 build/iphone/lib/*
 build/iphone/headers/*
 build/iphone/project.*
+Resources/javascripts/keys.js
