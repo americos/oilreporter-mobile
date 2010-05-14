@@ -477,15 +477,13 @@ Ti.App.addEventListener('submit_form', function(options) {
   if (options.latitude == null) { options.latitude = 0.0; }
   if (options.longitude == null) { options.longitude = 0.0; }
 
-  var jsonData = JSON.stringify({ report: {
-                                    description       : seeField.value,
-                                    oil               : oilSlider.value,
-                                    wetlands          : wetSlider.value,
-                                    wildlife          : wildlifeValue,
-                                    latitude          : options.latitude,
-                                    longitude         : options.longitude,
-                                    organization_id   : (properties.getString("orgId") == null ? null : properties.getString("orgId"))
-                                  }
+  var jsonData = JSON.stringify({ description       : seeField.value,
+                                  oil               : oilSlider.value,
+                                  wetlands          : wetSlider.value,
+                                  wildlife          : wildlifeValue,
+                                  latitude          : options.latitude,
+                                  longitude         : options.longitude,
+                                  organization_id   : (properties.getString("orgId") == null ? null : properties.getString("orgId"))
                                });
                                
   var xhr = Titanium.Network.createHTTPClient();
