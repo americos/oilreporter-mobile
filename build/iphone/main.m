@@ -7,9 +7,9 @@
 #define _QUOTEME(x) #x
 #define STRING(x) _QUOTEME(x)
 
-NSString * const TI_APPLICATION_DEPLOYTYPE = @"production";
-NSString * const TI_APPLICATION_ID = @"com.intridea.enature";
-NSString * const TI_APPLICATION_PUBLISHER = @"blim";
+NSString * const TI_APPLICATION_DEPLOYTYPE = @"development";
+NSString * const TI_APPLICATION_ID = @"com.intridea.oilreporter";
+NSString * const TI_APPLICATION_PUBLISHER = @"Intridea, Inc.";
 NSString * const TI_APPLICATION_URL = @"http://oilreporter.org";
 NSString * const TI_APPLICATION_NAME = @"Oil Reporter";
 NSString * const TI_APPLICATION_VERSION = @"1.0";
@@ -19,7 +19,7 @@ NSString * const TI_APPLICATION_GUID = @"0c5d028b-bc51-49e4-a79b-00fe7cab80b9";
 BOOL const TI_APPLICATION_ANALYTICS = true;
 
 #ifdef TARGET_IPHONE_SIMULATOR
-NSString * const TI_APPLICATION_RESOURCE_DIR = @"";
+NSString * const TI_APPLICATION_RESOURCE_DIR = @"/code/titanium/Oil Reporter/Resources";
 #endif
 
 int main(int argc, char *argv[]) {
