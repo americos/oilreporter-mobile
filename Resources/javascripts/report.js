@@ -3,11 +3,14 @@ Titanium.include('../javascripts/application.js');
 
 var win = Ti.UI.currentWindow;
 
+Ti.App.fireEvent('show_indicator');
+
 var properties = Ti.App.Properties;
 var currentImageView;
 var currentImageAdded = false;
 var wildlifeValue = "No wildlife present";
 var hostname = "http://oilreporter.org";
+var androidActivityIndicator;
 
 if(Ti.Platform.name == 'android') {
   var bgImage = Ti.UI.createImageView({
@@ -325,6 +328,12 @@ function displayMediaChooser() {
 }
 
 function newVideo() {
+  if(Ti.Platform.name == 'android') {
+    Ti.UI.createAlertDialog({
+		  title:'Sorry',
+		  message:'Video submission is currently not supported for this device, yet.'
+		}).show();
+  }
   Ti.Media.showCamera({
     mediaTypes: [Ti.Media.MEDIA_TYPE_VIDEO],
     success: function(event) {
@@ -391,7 +400,7 @@ function newPhoto() {
 		error:function(error) {
 			Ti.UI.createAlertDialog({
 			  title:'Sorry',
-			  message:'This device cannot take photos.'
+			  message:'This device either cannot take photos or there was a problem saving this photo.'
 			}).show();
 		},
 		allowImageEditing:true,
@@ -401,7 +410,7 @@ function newPhoto() {
 
 function chooseFromGallery() {
   Ti.Media.openPhotoGallery({
-    mediaTypes: [Ti.Media.MEDIA_TYPE_PHOTO, Ti.Media.MEDIA_TYPE_VIDEO],
+    mediaTypes: [Ti.Media.MEDIA_TYPE_PHOTO],
     success: function(event) {
       var cropRect = event.cropRect;
       currentMedia = event.media;
@@ -459,6 +468,9 @@ function clearAllValues(){
 }
 
 function showSuccess() {
+  if(Ti.Platform.name == 'android')
+    androidActivityIndicator.hide();
+    
   Ti.UI.createAlertDialog({
   	title:'Success!',
   	message:'Your report has been submitted.  Thank you!'
@@ -467,6 +479,9 @@ function showSuccess() {
 }
 
 var xhrOnError = function() {
+  if(Ti.Platform.name == 'android')
+    androidActivityIndicator.hide();
+    
   Ti.App.fireEvent('hide_indicator',{});
   Ti.UI.createAlertDialog({
   	title:'Sorry',
@@ -509,6 +524,9 @@ Ti.App.addEventListener('submit_form', function(options) {
         showSuccess();
       }      
     } else {
+      if(Ti.Platform.name == 'android')
+        androidActivityIndicator.hide();
+        
       Ti.App.fireEvent('hide_indicator',{});
       Ti.UI.createAlertDialog({
       	title:'Sorry',
@@ -540,9 +558,15 @@ Ti.App.addEventListener('upload_picture', function(options) {
     Ti.App.fireEvent('hide_indicator', {});
     showSuccess();
   };
-
+  
+  var payload = { 
+    "api_key": api_key,
+    "media": currentMedia, 
+    "_method": "PUT" 
+  };
+    
   xhr.open('PUT', hostname + '/reports/' + options.reportId);
-  xhr.send({ "api_key" : api_key, "media": currentMedia, "_method": "PUT" });
+  xhr.send(payload);
 });
 
 var submitButton = Titanium.UI.createButton({title:'Send'});
@@ -561,30 +585,39 @@ function submitReport() {
   	  message:"We cannot detect a network connection.  You need an active network connection to be able to submit oil reports."
   	}).show();
   } else if(seeField.value != null && seeField.value != "" && seeField.value.length > 0) {
+    if(Ti.Platform.name == 'android') {
+      androidActivityIndicator = Titanium.UI.createActivityIndicator({message:'Submitting'});
+      androidActivityIndicator.show();
+    }
     Ti.App.fireEvent('show_indicator', { title: 'Locating' });
 
-    if (Ti.Geolocation.locationServicesEnabled == true) {
-      Titanium.Geolocation.getCurrentPosition(function(e) {
-        Ti.App.fireEvent('change_title', { title: 'Submitting' });
-    		Ti.API.info("Received geolocation response");
-      
-    		if (e.error) {
-          Ti.App.fireEvent('hide_indicator',{});
-        	Titanium.UI.createAlertDialog({
-        	  title:"Location Required",
-        	  message:"There was a problem trying to retrieve your location.  Please try again soon."
-        	}).show();
-    		} else {
-    		  Ti.App.fireEvent('submit_form', { latitude: e.coords.latitude, longitude: e.coords.longitude });
-        }
-    	});
-    } else {
-      Ti.App.fireEvent('hide_indicator',{});
-      Titanium.UI.createAlertDialog({
-    	  title:"Location Required",
-    	  message:"Sorry, you need to have location services enabled to be able to submit reports."
-    	}).show();
+    if (Ti.Platform.name != 'android' && Ti.Geolocation.locationServicesEnabled == false) {
+        Ti.App.fireEvent('hide_indicator',{});
+        Titanium.UI.createAlertDialog({
+      	  title:"Location Required",
+      	  message:"Sorry, you need to have location services enabled to be able to submit reports."
+      	}).show();
+      	return;
     }
+      
+    Titanium.Geolocation.getCurrentPosition(function(e) {
+      Ti.App.fireEvent('change_title', { title: 'Submitting' });
+  		Ti.API.info("Received geolocation response");
+    
+  		if (e.error) {
+  		  if(Ti.Platform.name == 'android') {
+          androidActivityIndicator.hide();
+        }
+        
+        Ti.App.fireEvent('hide_indicator',{});
+      	Titanium.UI.createAlertDialog({
+      	  title:"Location Required",
+      	  message:"There was a problem trying to retrieve your location.  Please try again soon."
+      	}).show();
+  		} else {
+  		  Ti.App.fireEvent('submit_form', { latitude: e.coords.latitude, longitude: e.coords.longitude });
+      }
+  	});
   } else {
     Ti.UI.createAlertDialog({
     	title:'Sorry!',
@@ -621,6 +654,7 @@ if(Ti.Platform.name == "android") {
   Ti.UI.Android.OptionMenu.setMenu(menu); 
 }
 
+Ti.App.fireEvent('hide_indicator');
 
 Ti.App.addEventListener("set_wildlife_value",function(e){
   wildlifeValue = e.value;

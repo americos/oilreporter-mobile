@@ -8,6 +8,8 @@ var tableView;
 var data = [];
 var rowData = [];
 
+Ti.App.fireEvent('show_indicator');
+
 function buildData(tweet) {
 	var row = Ti.UI.createTableViewRow();
   row.height = 'auto';

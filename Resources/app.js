@@ -41,7 +41,7 @@ var volunteerTab = Titanium.UI.createTab({
 
 var aboutWin = Titanium.UI.createWindow({  
   url:'javascripts/about.js',
-  backgroundColor:'#2f5480',
+  backgroundColor:'#476e8b',
   title:'About Oil Reporter',
   barColor:"#333",
   backTitle:'Back'
@@ -73,7 +73,7 @@ tabGroup.addTab(settingsTab);
 var disclaimerTabGroup = Titanium.UI.createTabGroup();
 var disclaimerWin = Titanium.UI.createWindow({
   url:'javascripts/disclaimer.js',
-  backgroundColor:'#2f5480',
+  backgroundColor:'#476e8b',
   title:'Disclaimer',
   barColor:"#333",
   backTitle:'Close',
@@ -115,11 +115,6 @@ function showIndicator(title) {
 	indicatorShowing = true;
   Ti.API.info("showIndicator with title " + title);
 	
-	if(Ti.Platform.name == 'android') {
-	  Ti.API.info("in android block");
-    androidActivityIndicator = Titanium.UI.createActivityIndicator({message:title});
-    androidActivityIndicator.show();
-  } else {
   	// window container
   	indWin = Titanium.UI.createWindow({
   		height:150,
@@ -156,24 +151,22 @@ function showIndicator(title) {
   	indWin.add(message);
   	indWin.open();
   	actInd.show();
-  }
 };
 
 function hideIndicator() {
-  if(Ti.Platform.name == 'android') {
-    indicatorShowing = false;
-    androidActivityIndicator.hide();
-  } else {
   	actInd.hide();
   	indWin.close({opacity:0,duration:500});
   	indicatorShowing = false;
-  }
 };
 
 // ---------------------------------------------------------------
 // Add global event handlers to hide/show custom indicator
 // ---------------------------------------------------------------
 Titanium.App.addEventListener('show_indicator', function(e) {
+  if(Ti.Platform.name == 'android') {
+    return;
+  }
+  
   if(e.title == null) { e.title = 'Loading'; }
   if(indicatorShowing == true) { hideIndicator(); }
 	showIndicator(e.title);

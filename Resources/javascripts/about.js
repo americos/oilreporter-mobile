@@ -46,7 +46,7 @@ var webView = Ti.UI.createWebView({
   top: 0,
   left: 0,
   width: 320,
-  height: 370,
+  height: (Titanium.Platform.name == 'android' ? (Titanium.Platform.displayCaps.platformHeight-90) :370),
   backgroundColor:'transparent',
   html: "<html><body style='padding: 10px; font-size:14px;color:#fff;font-family:sans-serif;'>"+html+'</body></html>'
 });
