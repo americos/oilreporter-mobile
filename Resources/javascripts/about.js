@@ -35,12 +35,11 @@ var  html = "<p>Oil Reporter was built by <a href=\"javascript:Ti.App.fireEvent(
             "back to the public via a public data feed on               " +
             "<a href=\"javascript:Ti.App.fireEvent('openURL',{url:'http://oilreporter.org/reports'});\" style='color:#000060; font-weight:bold;'>oilreporter.org/reports</a> so that response" +
             "organizations can use this data for better understanding   " +
-            "of needs andresponse operations.</p>                       " +
+            "of needs andresponse operations. This application will provide the opportunity for organizations to share public data and create products and tools for the oil spill response. </p> " +
             "                                                           " +
-            "<p>CrisisCommons is a volunteer technology community       " +
-            "who provides technical expertise and technology            " +
-            "solutions to aid communities in times and places of        " +
-            "crisis.</p>";
+            "<p>CrisisCommons is a global network of volunteers who use creative        " +
+            "roblem solving and open technologies to help people in times and places of crisis." +
+            "Find out more about our work at <a href=\"javascript:Ti.App.fireEvent('openURL',{url:'http://crisiscommons.org'});\" style='color:#000060; font-weight:bold;'>www.crisiscommons.org</a></p>";
 
 var webView = Ti.UI.createWebView({
   top: 0,
