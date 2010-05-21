@@ -82,7 +82,7 @@ var tosButton = Ti.UI.createButton({
 });
 tosButton.addEventListener('click', function() {
   if(orgField.getValue() != null && orgField.getValue().length > 0) {
-    properties.setString("orgId",orgField.getValue());
+    properties.setString("orgPin",orgField.getValue());
   }
   Ti.App.fireEvent('remove_disclaimer');
 });

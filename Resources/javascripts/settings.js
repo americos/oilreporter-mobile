@@ -28,7 +28,7 @@ function buildRows() {
   
 	orgField = Titanium.UI.createTextField({
 		color:'#000',
-		value:(properties.hasProperty("orgId") ? properties.getString("orgId") : ''),
+		value:(properties.hasProperty("orgPin") ? properties.getString("orgPin") : ''),
   	hintText:'Optional ID',
 		autocorrect:false,
 		height:(Ti.Platform.name == "android" ? 40 : 30),
@@ -78,7 +78,7 @@ if(Ti.Platform.name == "android") {
 }
 
 function saveSettings() {
-  properties.setString('orgId',orgField.value);
+  properties.setString('orgPin',orgField.value);
 
   var alert = Titanium.UI.createAlertDialog({
   	title:'Saved!',
